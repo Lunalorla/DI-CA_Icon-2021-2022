@@ -25,4 +25,5 @@ TO DO LIST RECOMMENDER SYSTEM:
 	
 	
 	-applica la funzione che calcola i top n giochi raccomandati (vedi file web)
+	
 		-(far vedere la differenza di punteggi di similarità, tra i risultati proposti)
