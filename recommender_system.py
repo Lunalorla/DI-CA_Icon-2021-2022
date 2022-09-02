@@ -92,9 +92,3 @@ def main():
     print("Ecco a te i 5 giochi più simili a quello proposto:\n\n", result)
 
 main()
-
-#PROBLEMI:
-# -messo in commento la parte del controllo del gioco all'utente, non funziona bene il controllo con le stringhe
-#-possibile ulteriore ordinamento dei giochi consigliati, in base al prezzo crescente/decrescente
-#-richiesta in input di un budget, mostrare i giochi consigliati che siano minori o uguali a quel prezzo
-# -scegli se mettere il gioco inserito dall'utente alla fine o no, perchè così altrimenti cambia l'indice
