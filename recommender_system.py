@@ -80,12 +80,14 @@ def main():
 
     print("Questo è il videogioco che hai inserito:\n")
     print(users_data.head())
-    # risposta = input("\nE' corretto?:\t")
+    risposta = input("\nE' corretto?:\t")
 
-    # if risposta == "no" or "n" or "o":
-    #     users_data = get_info()
-    # else:
-    #     result = recommend_games('dataset/steam.csv', users_data)
+    if risposta == 'no':
+         users_data = get_info()
+    elif risposta == 'n':
+        users_data = get_info()
+    else:
+        result = recommend_games('dataset/steam.csv', users_data)
 
     result = recommend_games('dataset/steam.csv', users_data)
 
