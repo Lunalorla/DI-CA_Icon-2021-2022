@@ -64,7 +64,7 @@ def recommend_games(filename, users_data):
     games_index = [i[0] for i in similarity_scores]
     
     #Return the top 5 most similar games using integer-location based indexing (iloc)
-    result = steam_data[['name','price','developer','genres']].iloc[games_index]  #metti tutte le categorie che ti interessano per far uscire il risultato
+    result = steam_data[['name','genres','developer','price']].iloc[games_index]  #metti tutte le categorie che ti interessano per far uscire il risultato
     return result
 
 #funzione che prende il dataframe ridotto e aggiornato e lo vettorizza per crearsi una matrice tfidf
@@ -94,3 +94,7 @@ def main():
     print("Ecco a te i 5 giochi più simili a quello proposto:\n\n", result)
 
 main()
+
+#Consigli modifiche:
+#-possibile ulteriore ordinamento dei giochi consigliati, in base al prezzo crescente/decrescente
+#-richiesta in input di un budget, mostrare i giochi consigliati che siano minori o uguali a quel prezzo
