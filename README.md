@@ -23,7 +23,7 @@ Installare tutte le librerie necessarie dal file requirements.txt con il comando
 
 Se python in windows restituisce un errore provare con:
 
-```python.exe -m pip install -r requirements.txt```
+```py -m pip install -r requirements.txt```
 
 ## Avvio del sistema
 Per avviare il sistema utilizzare il comando:
