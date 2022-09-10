@@ -7,8 +7,8 @@ Repository per l'esame di Ingegneria della Conoscenza, a.a. 21/22 - Università 
 La documentazione risiede nel file: ```doc/Documentazione.pdf```
 
 Studenti:
-* Capotorto Lorena, 696947, l.capotorto@studenti.uniba.it
-* Dimatteo Roberto, 000000, mail
+* Capotorto Lorena, 696947 - mail: l.capotorto@studenti.uniba.it
+* Dimatteo Roberto, 707120 - mail: r.dimatteo6@studenti.uniba.it
 
 ## Root
 - **dataset/** contiene il dataset in formato .csv e l'Ontologia in formato .owl
