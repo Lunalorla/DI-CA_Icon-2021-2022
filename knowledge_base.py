@@ -124,10 +124,10 @@ def main_kb():
 
     while(True):
         print("Ecco le ricerche che puoi eseguire:")
-        print("1) ricerche sulle caratteristiche di un gioco")
-        print("2) confronti e ricerca di giochi in base ad una caratteristica")
-        print("3) verificare delle caratteristiche")
-        print("4) esci\n")
+        print("1) Ricerche sulle caratteristiche di un gioco")
+        print("2) Confronti e ricerca di giochi in base ad una caratteristica")
+        print("3) Verificare delle caratteristiche")
+        print("4) Exit Knowledge Base\n")
         choice1 = input("Quale scegli (inserisci il numero corrispondente alla tua scelta)? ")
         c1 = int(choice1)
 
