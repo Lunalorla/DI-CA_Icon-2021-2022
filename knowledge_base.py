@@ -119,15 +119,15 @@ def main_kb():
     dataframe = build_dataframe()
     kb = populate_kb(dataframe)
 
-    print("KNOWLEDGE BASE\n")
+    print("\nKNOWLEDGE BASE\n")
     print("Benvenuto, qui puoi eseguire ricerche sui giochi e sulle loro caratteristiche")
 
     while(True):
         print("Ecco le ricerche che puoi eseguire:")
-        print("1: ricerche sulle caratteristiche di un gioco")
-        print("2: confronti e ricerca di giochi in base ad una caratteristica")
-        print("3: verificare delle caratteristiche")
-        print("4: esci\n")
+        print("1) ricerche sulle caratteristiche di un gioco")
+        print("2) confronti e ricerca di giochi in base ad una caratteristica")
+        print("3) verificare delle caratteristiche")
+        print("4) esci\n")
         choice1 = input("Quale scegli (inserisci il numero corrispondente alla tua scelta)? ")
         c1 = int(choice1)
 
@@ -135,23 +135,27 @@ def main_kb():
             while(True):
                 game_name = input("Dammi il nome di un gioco: ")
                 print("Queste sono le caratteristiche che puoi cercare:")
-                print("1) developed_by\n2) released_by\n3) has_price\n4) quality\n5) is_genre\n6) has_english,\n")
+                print("1) developed_by\n2) released_by\n3) has_price\n4) quality\n5) is_genre\n6) has_english\n")
                 fatto = input("Selezionane una (scrivi il nome dell'operazione da eseguire, tutto in minuscolo e rispettando i trattini): ")
                 result = kb.query(pl.Expr(f"{fatto}(What,{game_name})"))
                 parola = result[0]['What']
                 print('\nil tuo risultato è:', parola)
-                risposta = input("\nVuoi eseguire un'altra ricerca o vuoi tornare indietro? indietro = sì, ricerca = no")
+                risposta = input("\nVuoi eseguire un'altra ricerca o vuoi tornare indietro? Indietro (sì), Continua (no)")
                 if(risposta == 'sì'):
+                    break
+                elif(risposta == 'si'):
+                    break
+                elif(risposta == 's'):
                     break
 
         elif(c1 == 2):
             while(True):
                 print("Queste sono ricerche che puoi eseguire sulle caratteristiche:\n")
-                print("1: lista di giochi di un prezzo")
-                print("2: confronto di qualità tra 2 giochi")
-                print("3: lista di giochi sviluppati da una casa")
-                print("4: lista di giochi rilasciati da una casa")
-                print("5: indietro\n")
+                print("1) lista di giochi di un prezzo")
+                print("2) confronto di qualità tra 2 giochi")
+                print("3) lista di giochi sviluppati da una casa")
+                print("4) lista di giochi rilasciati da una casa")
+                print("5) indietro\n")
                 choice3 = input("Selezionane una (inserisci il numero corrispondente alla tua scelta): ")
                 c3 = int(choice3)
 
@@ -200,18 +204,18 @@ def main_kb():
         elif(c1 == 3):
             while(True):
                 print("Questi sono le caratteristiche che puoi verificare:")
-                print("1) developer\n2) publisher\n3) prices\n4) stars\n5) genre\n6) english,\n")
+                print("1) developer\n2) publisher\n3) prices\n4) stars\n5) genre\n6) english\n")
                 fatto = input("Selezionane una (scrivi il nome dell'operazione da eseguire, tutto in minuscolo): ")
                 name = input("Quale gioco vuoi controllare? ")
                 char = input("Inserisci un dato corrispondente alla caratteristica scelta: ")
                 print(kb.query(pl.Expr(f"{fatto}({name},{char})")))
-                risposta = input("Vuoi eseguire un'altra verifica o vuoi tornare indietro? indietro = sì, ricerca = no")
+                risposta = input("Vuoi eseguire un'altra verifica o vuoi tornare indietro? Indietro (sì), Continua (no)")
                 if(risposta == 'sì'):
+                    break
+                elif(risposta == 'si'):
+                    break
+                elif(risposta == 's'):
                     break
 
         elif(c1 == 4):
-            print("\nArrivederci!")
             break
-
-
-main_kb()
