@@ -140,7 +140,7 @@ def main_kb():
                 result = kb.query(pl.Expr(f"{fatto}(What,{game_name})"))
                 parola = result[0]['What']
                 print('\nil tuo risultato è:', parola)
-                risposta = input("\nVuoi eseguire un'altra ricerca o vuoi tornare indietro? Indietro (sì), Continua (no)")
+                risposta = input("\nVuoi eseguire un'altra ricerca o vuoi tornare indietro?\tIndietro (sì), Continua (no)")
                 if(risposta == 'sì'):
                     break
                 elif(risposta == 'si'):
@@ -209,7 +209,7 @@ def main_kb():
                 name = input("Quale gioco vuoi controllare? ")
                 char = input("Inserisci un dato corrispondente alla caratteristica scelta: ")
                 print(kb.query(pl.Expr(f"{fatto}({name},{char})")))
-                risposta = input("Vuoi eseguire un'altra verifica o vuoi tornare indietro? Indietro (sì), Continua (no)")
+                risposta = input("Vuoi eseguire un'altra verifica o vuoi tornare indietro?\tIndietro (sì), Continua (no)")
                 if(risposta == 'sì'):
                     break
                 elif(risposta == 'si'):
