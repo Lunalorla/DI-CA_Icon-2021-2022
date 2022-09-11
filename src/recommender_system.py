@@ -105,7 +105,3 @@ def main_recommender():
     result = recommend_games('dataset/steam.csv', users_data)
 
     print("Ecco a te i 5 giochi più simili a quello proposto:\n\n", result)
-
-#Consigli modifiche:
-#-possibile ulteriore ordinamento dei giochi consigliati, in base al prezzo crescente/decrescente
-#-richiesta in input di un budget, mostrare i giochi consigliati che siano minori o uguali a quel prezzo
