@@ -11,10 +11,10 @@ def get_info():
     print("GET RECOMMENDED\n\nBenvenuto, digita le caratteristiche del gioco su cui vuoi che si avvii la raccomandazione\n")
 
     nome = input("Inserisci il nome:\n")
-    developer = input("Inserisci lo sviluppatore:\n")
-    publisher = input("Inserisci la casa pubblicatrice:\n")
-    platforms = input("Inserisci le piattaforme:\t (ricorda tra una parola e l'altra di mettere il simbolo ';' )\n")
-    genres = input("Inserisci il genere:\t (ricorda tra una parola e l'altra di mettere il simbolo ';' )\n")
+    developer = input("\nInserisci lo sviluppatore:\n")
+    publisher = input("\nInserisci la casa pubblicatrice:\n")
+    platforms = input("\nInserisci le piattaforme:\t (ricorda tra una parola e l'altra di mettere il simbolo ';' )\n")
+    genres = input("\nInserisci il genere:\t (ricorda tra una parola e l'altra di mettere il simbolo ';' )\n")
 
     #creo un dataframe temporaneo contenente i dati messi dall'utente
     users_data = pd.DataFrame({'name': nome, 'developer': developer,'publisher': publisher,'platforms': platforms,'genres': genres}, index=[0])
@@ -75,7 +75,7 @@ def vectorize_data(steam_data):
     return tfidf_matrix
 
 #funzione main che gestisce il flusso del programma per la recommendation e che stampa alla fine il risultato avuto
-def main():
+def main_recommender():
     users_data = get_info()
 
     print("Questo è il videogioco che hai inserito:\n")
@@ -92,8 +92,6 @@ def main():
     result = recommend_games('dataset/steam.csv', users_data)
 
     print("Ecco a te i 5 giochi più simili a quello proposto:\n\n", result)
-
-main()
 
 #Consigli modifiche:
 #-possibile ulteriore ordinamento dei giochi consigliati, in base al prezzo crescente/decrescente
