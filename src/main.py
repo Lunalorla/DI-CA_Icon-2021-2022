@@ -26,5 +26,5 @@ def avvio():
             print("Arrivederci!")
             break
 
-#if __name__ == '__main__':
-avvio()
+if __name__ == '__main__':
+    avvio()
