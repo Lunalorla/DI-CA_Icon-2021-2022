@@ -7,9 +7,8 @@ from sklearn.metrics.pairwise import linear_kernel
 
 #funzione che gestisce la comunicazione con l'utente, chiedendo di inserire le caratteristiche del gioco su cui vuole che venga fatta la recomendation
 def get_info():
-    #prendo gli input dall'utente
-    print("GET RECOMMENDED\n\nBenvenuto, digita le caratteristiche del gioco su cui vuoi che si avvii la raccomandazione\n")
 
+    #prendo gli input dall'utente
     nome = input("Inserisci il nome:\n")
     developer = input("\nInserisci lo sviluppatore:\n")
     publisher = input("\nInserisci la casa pubblicatrice:\n")
@@ -18,6 +17,18 @@ def get_info():
 
     #creo un dataframe temporaneo contenente i dati messi dall'utente
     users_data = pd.DataFrame({'name': nome, 'developer': developer,'publisher': publisher,'platforms': platforms,'genres': genres}, index=[0])
+
+    print("Questo è il videogioco che hai inserito:\n")
+    print(users_data.head())
+    risposta = input("\nE' corretto?:\t")
+
+    while(True):
+        if risposta == 'no':
+            users_data = get_info()
+        elif risposta == 'n':
+            users_data = get_info()
+        else:
+            break
 
     return users_data
 
@@ -76,19 +87,25 @@ def vectorize_data(steam_data):
 
 #funzione main che gestisce il flusso del programma per la recommendation e che stampa alla fine il risultato avuto
 def main_recommender():
+    print("GET RECOMMENDED\n\nBenvenuto, digita le caratteristiche del gioco su cui vuoi che si avvii la raccomandazione\n")
     users_data = get_info()
 
-    print("Questo è il videogioco che hai inserito:\n")
-    print(users_data.head())
-    risposta = input("\nE' corretto?:\t")
+    while(True):
+        print("\nQuesto è il videogioco che hai inserito:\n")
+        print(users_data.head())
+        risposta = input("\nE' corretto?:\t")
 
-    if risposta == 'no':
-         users_data = get_info()
-    elif risposta == 'n':
-        users_data = get_info()
-    else:
-        result = recommend_games('dataset/steam.csv', users_data)
+        if risposta == 'no':
+            users_data = get_info()
+        elif risposta == 'n':
+            users_data = get_info()
+        else:
+            break
 
     result = recommend_games('dataset/steam.csv', users_data)
 
     print("Ecco a te i 5 giochi più simili a quello proposto:\n\n", result)
+
+#Consigli modifiche:
+#-possibile ulteriore ordinamento dei giochi consigliati, in base al prezzo crescente/decrescente
+#-richiesta in input di un budget, mostrare i giochi consigliati che siano minori o uguali a quel prezzo
