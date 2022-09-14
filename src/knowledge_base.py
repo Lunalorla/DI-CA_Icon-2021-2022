@@ -109,6 +109,9 @@ def populate_kb(dataframe):
     # l'utente può chiedere se un gioco è in lingua inglese
     kb.append("has_english(X, Y) :- english(Y, X)")
 
+    # l'utente può passare 2 giochi diversi per confrontarne la qualità
+    kb.append("quality_check(X, Y, T, Z) :- stars(X, T), stars(Y, Z)")
+
     steam_kb(kb)
 
     return steam_kb
@@ -135,11 +138,48 @@ def main_kb():
             while(True):
                 game_name = input("Dammi il nome di un gioco: ")
                 print("Queste sono le caratteristiche che puoi cercare:")
-                print("1) developed_by\n2) released_by\n3) has_price\n4) quality\n5) is_genre\n6) has_english\n")
-                fatto = input("Selezionane una (scrivi il nome dell'operazione da eseguire, tutto in minuscolo e rispettando i trattini): ")
-                result = kb.query(pl.Expr(f"{fatto}(What,{game_name})"))
-                parola = result[0]['What']
-                print('\nil tuo risultato è:', parola)
+                print("1) Chi lo ha sviluppato")
+                print("2) Chi lo ha distribuito")
+                print("3) Quanto costa")
+                print("4) Quante stelle ha (su una scala da 1 a 5)")
+                print("5) Di che genere è")
+                print("6) Se è disponibile in lingua inlgese")
+                choice2 = input("Selezionane una: ")
+                c2 = int(choice2)
+
+                if(c2 == 1):
+                    result = kb.query(pl.Expr(f"developed_by(What,{game_name})"))
+                    parola = result[0]['What']
+                    print("\n", game_name, "è stato sviluppato da:", parola)
+
+                elif(c2 == 2):
+                    result = kb.query(pl.Expr(f"released_by(What,{game_name})"))
+                    parola = result[0]['What']
+                    print("\n", game_name, "è stato rilasciato da:", parola)
+
+                elif(c2 == 3):
+                    result = kb.query(pl.Expr(f"has_price(What,{game_name})"))
+                    parola = result[0]['What']
+                    print("\n", game_name, "costa:", parola)
+
+                elif(c2 == 4):
+                    result = kb.query(pl.Expr(f"quality(What,{game_name})"))
+                    parola = result[0]['What']
+                    print("\n", game_name, "ha:", parola, "stelle")
+
+                elif(c2 == 5):
+                    result = kb.query(pl.Expr(f"is_genre(What,{game_name})"))
+                    parola = result[0]['What']
+                    print("\nIl genere di", game_name, "è:", parola)
+
+                elif(c2 == 6):
+                    result = kb.query(pl.Expr(f"has_english(What,{game_name})"))
+                    parola = result[0]['What']
+                    if (parola == 'yes'):
+                        print("\n", game_name, "è disponibile in lingua inglese")
+                    elif (parola == 'no'):
+                        print("\n", game_name, "non è disponibile in lingua inglese")
+                
                 risposta = input("\nVuoi eseguire un'altra ricerca o vuoi tornare indietro?\tIndietro (sì), Continua (no)")
                 if(risposta == 'sì'):
                     break
@@ -149,56 +189,41 @@ def main_kb():
                     break
 
         elif(c1 == 2):
+            print("Queste sono ricerche che puoi eseguire sulle caratteristiche:")
             while(True):
-                print("Queste sono ricerche che puoi eseguire sulle caratteristiche:\n")
-                print("1) lista di giochi di un prezzo")
-                print("2) confronto di qualità tra 2 giochi")
-                print("3) lista di giochi sviluppati da una casa")
-                print("4) lista di giochi rilasciati da una casa")
-                print("5) indietro\n")
+                print("1) Lista di giochi di un prezzo")
+                print("2) Confronto di qualità tra 2 giochi")
+                print("3) Indietro\n")
                 choice3 = input("Selezionane una (inserisci il numero corrispondente alla tua scelta): ")
                 c3 = int(choice3)
 
                 if(c3 == 1):
                     prezzo = input("Inserisci un prezzo: ")
-                    result = kb.query(pl.Expr(f"costo({prezzo},What)"))
-                    print("\nEcco la lista di giochi con prezzo ", prezzo, ":\n")
+                    result = kb.query(pl.Expr(f"has_price({prezzo},What)"))
+                    print("\nEcco la lista dei primi 100 giochi con prezzo ", prezzo, ":\n")
                     result = result[0:100]
                     i = 1
                     for r in result:
                         print(i, ")", r[f"{prezzo}"])
                         i += 1
+                    print("\nPuoi selezionare una nuova ricerca:")
 
                 # confronto di qualità tra 2 giochi
                 elif(c3 == 2):
                     game1 = input("Dimmi il nome del primo gioco: ")
                     game2 = input("DImmi il nome del secondo gioco: ")
-                    result = kb.query(pl.Expr(f"quality(What,{game1})"))
-                    star1 = result[0]['What']
-                    result = kb.query(pl.Expr(f"quality(What,{game2})"))
-                    star2 = result[0]['What']
+                    result = kb.query(pl.Expr(f"quality_check({game1}, {game2}, X, Y"))
+                    star1 = result[0]['X']
+                    star2 = result[0]['Y']
                     if(star1 > star2):
-                        print("\nIl gioco migliore è: ", game1)
+                        print("\nIl gioco migliore è: ", game1, ", perché la qualità di", game1, "è", star1, "è la qualità di", game2, "è", star2)
                     elif(star1 < star2):
-                        print("\nIl gioco migliore è: ", game2)
+                        print("\nIl gioco migliore è: ", game2, ", perché la qualità di", game2, "è", star2, "è la qualità di", game1, "è", star1)
                     elif(star1 == star2):
-                        print("\nI due giochi hanno la stessa qualità")
+                        print("\nI due giochi hanno la stessa qualità, perché la qualità di", game1, "e", game2, "è uguale")
+                    print("\nPuoi selezionare una nuova ricerca:")
 
                 elif(c3 == 3):
-                    sviluppatore = input("Inserisci uno sviluppatore: ")
-                    result = kb.query(pl.Expr(f"developed_by({sviluppatore},What)"))
-                    print("\nEcco la lista di giochi sviluppati da ", sviluppatore, ":\n")
-                    for r in result:
-                        print(r['What'])
-
-                elif(c3 == 4):
-                    pubblicato = input("Inserisci un publisher: ")
-                    result = kb.query(pl.Expr(f"released_by({pubblicato},What)"))
-                    print("\nEcco la lista di giochi rilasciati da ", pubblicato, ":\n")
-                    for r in result:
-                        print(r['What'])
-
-                elif(c3 == 5):
                     break
                     
         elif(c1 == 3):
