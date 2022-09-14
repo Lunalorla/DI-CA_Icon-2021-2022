@@ -13,7 +13,7 @@ Studenti:
 ## Root
 - **dataset/** contiene il dataset in formato .csv e l'Ontologia in formato .owl
 - **src/** contiene il codice sorgente in python
-- **images/** contiene le immagini della struttura dell'ontologia
+- **images/** contiene l'mmagine della struttura dell'ontologia
 - **doc/** contiene la relazione completa del progetto
 
 ## Installazione dei requisiti
