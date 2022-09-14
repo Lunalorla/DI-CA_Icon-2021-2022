@@ -9,6 +9,7 @@ from sklearn.metrics.pairwise import linear_kernel
 def get_info():
 
     #prendo gli input dall'utente
+    print("\nRicorda di inserire i dati con la lettera maiuscola iniziale\n")
     nome = input("Inserisci il nome:\n")
     developer = input("\nInserisci lo sviluppatore:\n")
     publisher = input("\nInserisci la casa pubblicatrice:\n")
