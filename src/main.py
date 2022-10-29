@@ -1,5 +1,5 @@
 from ontology import main_ontology
-from recommender_system import main_recommender
+from classification_validation import main_recommender
 from knowledge_base import main_kb
 
 def avvio():
