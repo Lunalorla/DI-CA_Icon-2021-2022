@@ -15,7 +15,7 @@ def avvio():
         elif risposta == '3':
             main_ontology()
         elif risposta == '4':
-            print("Arrivederci!")
+            print("\nArrivederci!")
             break
         else:
             print("Inserisci correttamente il numero")
@@ -23,7 +23,7 @@ def avvio():
         print("\nVuoi terminare o continuare?\tTermina (si) Continua (no)\n")
         risposta2 = input()
         if risposta2 == 'si':
-            print("Arrivederci!")
+            print("\nArrivederci!")
             break
 
 if __name__ == '__main__':
