@@ -76,7 +76,7 @@ def vectorize_data(steam_data):
     tfidf_matrix = vectorizer.fit_transform(steam_data['all_content'])
     return tfidf_matrix
 
-#funzione main che gestisce il flusso del programma per la recommendation
+#funzione che gestisce l'ottenimento di informazioni dall'utente per la recommendation
 def get_recommendation():
     print("GET RECOMMENDED\n\nBenvenuto, digita le caratteristiche del gioco su cui vuoi che si avvii la raccomandazione\n")
     users_data = get_info()
