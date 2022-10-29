@@ -185,4 +185,4 @@ def main_recommender():
 
     recommend_data['star_prediction'] = predizione_star
 
-    print("\nEcco a te i 5 giochi più simili a quello proposto con una predizione sulla categoria star:\n",recommend_data)
+    print("\nEcco a te i 5 giochi più simili a quello proposto con una predizione sulla categoria star:",recommend_data, '\n')
