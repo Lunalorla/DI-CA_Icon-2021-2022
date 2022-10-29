@@ -99,7 +99,6 @@ def recommend_pearson(data):
 
     end = time.time()
     print("\nTempo di esecuzione con correlazione di Pearson: ", end - start)
-    return result
 
 #funzione che calcola la percentuale di spasità che un dataset possa avere
 def calculating_sparsity(data):
@@ -108,7 +107,6 @@ def calculating_sparsity(data):
 
     sparsity = 1.0 - (np.count_nonzero(data) / float(data.size))
 
-    #due modi per calcolare la sparsità del dataframe
     print('\nSparsità del dataset:', sparsity*100, "%\n")
 
 
