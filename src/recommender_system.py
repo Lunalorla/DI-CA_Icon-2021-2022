@@ -2,8 +2,7 @@ import numpy as np
 import pandas as pd
 import sklearn
 from sklearn.feature_extraction.text import TfidfVectorizer
-from sklearn.metrics.pairwise import cosine_similarity
-from sklearn.metrics.pairwise import linear_kernel
+from scipy.stats import pearsonr
 
 #funzione che gestisce la comunicazione con l'utente, chiedendo di inserire le caratteristiche del gioco su cui vuole che venga fatta la recomendation
 def get_info():
@@ -19,24 +18,12 @@ def get_info():
     #creo un dataframe temporaneo contenente i dati messi dall'utente
     users_data = pd.DataFrame({'name': nome, 'developer': developer,'publisher': publisher,'platforms': platforms,'genres': genres}, index=[0])
 
-    print("Questo è il videogioco che hai inserito:\n")
-    print(users_data.head())
-    risposta = input("\nE' corretto?:\t")
-
-    while(True):
-        if risposta == 'no':
-            users_data = get_info()
-        elif risposta == 'n':
-            users_data = get_info()
-        else:
-            break
-
     return users_data
 
 #funzione che legge il dataset iniziale, lo riduce, controlla se il gioco inserito dall'utente sia già presente o meno, se non lo è lo aggiunge,
 #vettorizza il dataset aggiornato, calcola la similarità del coseno, trova i 5 giochi più simili a quello indicato dall'utente, basandosi sulla sua posizione
-#nel dataframe utilizzando l'indice ottenuto
-def recommend_games(filename, users_data):
+#nel dataframe utilizzando l'indice ottenuto e si salva gli indici
+def construct_recommendation(filename, users_data):
 
     steam_data = pd.read_csv(filename)
     steam_data['positivity_quote'] = steam_data['positive_ratings'] // steam_data['negative_ratings']
@@ -56,28 +43,31 @@ def recommend_games(filename, users_data):
             break
 
     if control == 1:
-        steam_data = pd.concat([users_data,steam_data], ignore_index=True) #per metterlo alla fine scambia l'ordine dei dataframe
+        steam_data = pd.concat([users_data,steam_data], ignore_index=True)
 
+    #creazione della categoria che conterrà le altre categorie per procedere alla vettorizzazione dei dati
     steam_data['all_content'] = steam_data['name'] + ';' + steam_data['developer'] + ';' + steam_data['publisher'] + ';' + steam_data['platforms'] + ';' + steam_data['genres'] #definisci le categorie che vuoi usare e uniscile in una, per poter applicare il tf-idf
     
+    #vettorizzazione
     tfidf_matrix = vectorize_data(steam_data)
-    cosine_similarity = linear_kernel(tfidf_matrix, tfidf_matrix) #costruzione della similarità del coseno da applicare poi alla matrice creata
+    tfidf_matrix_array = tfidf_matrix.toarray()
+
+    print('\nInizio ricerca di giochi...')
 
     indices = pd.Series(steam_data['name'].index)
 
     id = indices[index]
-    # Get the pairwise similarity scores of all books compared that book,
-    # sorting them and getting top 5
-    similarity_scores = list(enumerate(cosine_similarity[id]))
-    similarity_scores = sorted(similarity_scores, key=lambda x: x[1], reverse=True)
-    similarity_scores = similarity_scores[1:6]
-    
-    #Get the books index
-    games_index = [i[0] for i in similarity_scores]
-    
-    #Return the top 5 most similar games using integer-location based indexing (iloc)
-    result = steam_data[['name','genres','developer','price']].iloc[games_index]  #metti tutte le categorie che ti interessano per far uscire il risultato
-    return result
+    correlation = []
+    for i in range(len(tfidf_matrix_array)):
+        correlation.append(pearsonr(tfidf_matrix_array[id], tfidf_matrix_array[i])[0])
+    correlation = list(enumerate(correlation))
+    sorted_corr = sorted(correlation, reverse=True, key=lambda x: x[1])[1:6]
+    games_index = [i[0] for i in sorted_corr] #indici dei 5 giochi più simili a quello passato dall'utente
+
+    print('\n[5 giochi più simili a quello inserito trovati]')
+    print('\nPassaggio alla analisi del modello...')
+
+    return games_index
 
 #funzione che prende il dataframe ridotto e aggiornato e lo vettorizza per crearsi una matrice tfidf
 def vectorize_data(steam_data):
@@ -86,8 +76,8 @@ def vectorize_data(steam_data):
     tfidf_matrix = vectorizer.fit_transform(steam_data['all_content'])
     return tfidf_matrix
 
-#funzione main che gestisce il flusso del programma per la recommendation e che stampa alla fine il risultato avuto
-def main_recommender():
+#funzione main che gestisce il flusso del programma per la recommendation
+def get_recommendation():
     print("GET RECOMMENDED\n\nBenvenuto, digita le caratteristiche del gioco su cui vuoi che si avvii la raccomandazione\n")
     users_data = get_info()
 
@@ -103,6 +93,6 @@ def main_recommender():
         else:
             break
 
-    result = recommend_games('dataset/steam.csv', users_data)
+    games_index = construct_recommendation('dataset/steam.csv', users_data)
 
-    print("Ecco a te i 5 giochi più simili a quello proposto:\n\n", result)
+    return games_index
