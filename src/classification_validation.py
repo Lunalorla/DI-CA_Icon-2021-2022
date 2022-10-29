@@ -98,9 +98,6 @@ def SearchingBestModelStats(X_train, X_test, y_train, y_test):
 
     print('\nLa nostra accuratezza è bassa, dobbiamo migliorare la qualità delle nostre predizioni\n')
 
-    #cambiando il target da star a english, l'accuratezza sale a 98%, invece che 29% come era prima
-    #anche le predizioni sono migliori
-
     result = {}
 
     result = HyperparametersSearch(X_train, X_test, y_train, y_test)
@@ -189,7 +186,3 @@ def main_recommender():
     recommend_data['star_prediction'] = predizione_star
 
     print("\nEcco a te i 5 giochi più simili a quello proposto con una predizione sulla categoria star:\n",recommend_data)
-
-
-#utilizza random search che è più veloce di grid search e a quanto pare migliore per il ritrovamento dei parametri
-#la categoria con english rimane solo da documentazione, sarebbe fin troppo semplice da mostrare e non si potrebbe troppo lavorare sul miglioramento dell'accuracy
