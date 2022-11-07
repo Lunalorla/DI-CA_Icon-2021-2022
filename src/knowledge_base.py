@@ -32,7 +32,7 @@ def build_dataframe():
     steam_data.loc[(steam_data['english'] == 1), ['english']] = 'yes'
 
     # creo una copia del dataframe con all'interno solo le colonne d'interesse
-    steam_data = steam_data[['name','developer','publisher','english','star','steamspy_tags','price']].copy()
+    steam_data = steam_data[['name','developer','publisher','english','star','steamspy_tags','price','average_playtime','genres']].copy()
 
     return steam_data
 
