@@ -185,16 +185,18 @@ def liking_prob(dataframe):
     elif(bool == 'No'):
         Genre_Similarity = -2.5
 
-    Compatibility = Playtime_Similarity + Genre_Similarity
+    # regola che calcola la compatibilità dei 2 giochi
+    kb.append(f"compatibility(Num1, Num2, S1) :- S1 is Num1 + Num2")
 
     # aggiungo la regola che calcola la probabilità che il gioco nuovo possa piacere all'utente
     # Regola che calcola la probabilità che il nuovo gioco possa piacere all'utente
-    kb.append(f"to_like(utente, %s, Prob) :- stress(utente, P1), Prob is P1 + %s" % (Compatibility, Compatibility))
+    kb.append(f"to_like(utente, Num1, Num2, Prob) :- stress(utente, P1), compatibility(Num1, Num2, S1), Prob is P1 + S1")
 
     liking_kb(kb)
 
-    result = liking_kb.query(pl.Expr(f"to_like(utente, {Compatibility}, What)"))
-    p = result[0][f"{Compatibility}"]
+    result = liking_kb.query(pl.Expr(f"to_like(utente, {Playtime_Similarity}, {Genre_Similarity}, What)"))
+    comp = list(result[0].keys())[0]
+    p = result[0][f"{comp}"]
 
     if(p > 100):
         p = 100
