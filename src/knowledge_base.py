@@ -329,8 +329,8 @@ def main_kb():
 
                 # confronto di qualità tra 2 giochi
                 elif(c3 == 2):
-                    game1 = input("Dimmi il nome del primo gioco: ")
-                    game2 = input("DImmi il nome del secondo gioco: ")
+                    game1 = input("Dimmi il nome del primo gioco: ").lower()
+                    game2 = input("Dimmi il nome del secondo gioco: ").lower()
                     result = kb.query(pl.Expr(f"quality_check({game1}, {game2}, X, Y"))
                     star1 = result[0]['X']
                     star2 = result[0]['Y']
