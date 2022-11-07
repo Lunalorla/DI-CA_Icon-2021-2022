@@ -255,7 +255,7 @@ def main_kb():
 
         if(c1 == 1):
             while(True):
-                game_name = input("Dammi il nome di un gioco: ")
+                game_name = input("Dammi il nome di un gioco: ").lower()
                 print("Queste sono le caratteristiche che puoi cercare:")
                 print("1) Chi lo ha sviluppato")
                 print("2) Chi lo ha distribuito")
@@ -339,7 +339,7 @@ def main_kb():
                     elif(star1 < star2):
                         print("\nIl gioco migliore è: ", game2, ", perché la qualità di", game2, "è", star2, "è la qualità di", game1, "è", star1)
                     elif(star1 == star2):
-                        print("\nI due giochi hanno la stessa qualità, perché la qualità di", game1, "e", game2, "è uguale")
+                        print("\nI due giochi hanno la stessa qualità, perché la qualità di", game1, "è", star1, ", e la qualità di", game2, "è", star2)
                     print("\nPuoi selezionare una nuova ricerca:")
 
                 elif(c3 == 3):
@@ -349,9 +349,9 @@ def main_kb():
             while(True):
                 print("Questi sono le caratteristiche che puoi verificare:")
                 print("1) developer\n2) publisher\n3) prices\n4) stars\n5) genre\n6) english\n")
-                fatto = input("Selezionane una (scrivi il nome dell'operazione da eseguire, tutto in minuscolo): ")
-                name = input("Quale gioco vuoi controllare? ")
-                char = input("Inserisci un dato corrispondente alla caratteristica scelta: ")
+                fatto = input("Selezionane una (scrivi il nome dell'operazione da eseguire, tutto in minuscolo): ").lower()
+                name = input("Quale gioco vuoi controllare? ").lower()
+                char = input("Inserisci un dato corrispondente alla caratteristica scelta: ").lower()
                 print(kb.query(pl.Expr(f"{fatto}({name},{char})")))
                 risposta = input("Vuoi eseguire un'altra verifica o vuoi tornare indietro?\tIndietro (sì), Continua (no)")
                 if(risposta == 'sì'):
