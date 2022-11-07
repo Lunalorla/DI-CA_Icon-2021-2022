@@ -116,6 +116,122 @@ def populate_kb(dataframe):
 
     return steam_kb
 
+def liking_prob(dataframe):
+
+    liking_kb = pl.KnowledgeBase('Liking Probability')
+    kb = []
+
+    # chiedo di darmi il nome di un gioco che è piaciuto all'utente e di un gioco di cui vuole sapere la liking probability
+    Gioco_Piaciuto = input("Insrisci il nome del gioco che ti è piaciuto: ")
+    genere = input("Dimmi il genere del gioco: ")
+    tempo_gioco = input("e il tempo di gioco medio: ")
+    # aggiungo i fatti riguardanti questo gioco
+    kb.append(f"is_genre({Gioco_Piaciuto}, {genere}")
+    kb.append(f"avg_playtime({Gioco_Piaciuto}, {tempo_gioco}")
+    kb.append(f"liked_game(utente, {Gioco_Piaciuto}")
+
+    Gioco_Nuovo = input("Inserisci il nome di un gioco di cui vuoi calcolare la probabilità che ti piaccia: ")
+    genere = input("Dimmi il genere del gioco: ")
+    tempo_gioco = input("e il tempo di gioco medio: ")
+    # aggiungo i fatti riguardanti questo gioco
+    kb.append(f"is_genre({Gioco_Nuovo}, {genere}")
+    kb.append(f"avg_playtime({Gioco_Nuovo}, {tempo_gioco}")
+
+    # chiedo di sapere quante ora l'utente lavora in un giorno
+    Orario = input("Quante ore lavori/studi al giorno? ")
+    Orario = int(Orario)
+    # fatto che associa l'utente e le sue ore di lavorio giornaliere
+    kb.append(f"has_work(utente, %s)" % Orario)
+    # regola che calcola lo stress dell'utente
+    kb.append(f"stress(utente, Prob) :- Prob is %s" % Orario)
+
+    # aggiungo i fatti che associano un genere al genere stesso, potendo dare la conferma che due generi siano uguali
+    data = dataframe['genres']
+    result = list(set(data))
+    i = 0
+    while(i < len(result)):
+        kb.append(f"same_genre({result[i]},{result[i]}")
+        i += 1
+
+    # l'utente può chiedere l'avg_playtime di un gioco
+    kb.append("has_avg_playtime(X, Y) :- avg_playtime(X, Y)")
+
+    # regola che fa la differenza tra l’avg_playtime del gioco che già piace all’utente e del gioco nuovo.
+    # kb.append(f"avg_playtime_comp({Gioco_Piaciuto}, {Gioco_Nuovo}, Y) :- liked_game(utente, Gioco_Piaciuto), has_avg_playtime({Gioco_Piaciuto}, Avg1), has_avg_playtime({Gioco_Nuovo}, Avg2), Y is Avg1 - Avg2")
+    kb.append(f"avg_playtime_comp(Gioco1, Gioco2, Y) :- liked_game(utente, Gioco1), has_avg_playtime(Gioco1, Avg1), has_avg_playtime(Gioco2, Avg2), Y is Avg1 - Avg2")
+
+    # Regola che controlla se due giochi hanno lo stesso genere
+    kb.append(f"has_same_genre(Gioco1, Gioco2) :- is_genre(Gioco1, X), is_genre(Gioco2, Y), same_genre(X, Y)")
+
+    liking_kb(kb)
+
+    # PLAYTIME SIMILARITY
+
+    # faccio la query per potermi salvare il valore di Y
+    result = liking_kb.query(pl.Expr(f"avg_playtime_comp({Gioco_Piaciuto}, {Gioco_Nuovo}, What)"))
+    Playtime_Similarity = result[0]['What']
+
+    Playtime_Similarity = assign_range(Playtime_Similarity)
+
+    # GENRE SIMILARITY
+
+    result = liking_kb.query(pl.Expr(f"has_same_genre({Gioco_Piaciuto}, {Gioco_Nuovo})"))
+    bool = result[0]
+    Genre_Similarity = 0
+    if(bool == 'Yes'):
+        Genre_Similarity = 2.5
+    elif(bool == 'No'):
+        Genre_Similarity = -2.5
+
+    Compatibility = Playtime_Similarity + Genre_Similarity
+
+    # aggiungo la regola che calcola la probabilità che il gioco nuovo possa piacere all'utente
+    # Regola che calcola la probabilità che il nuovo gioco possa piacere all'utente
+    kb.append(f"to_like(utente, %s, Prob) :- stress(utente, P1), Prob is P1 + %s" % (Compatibility, Compatibility))
+
+    liking_kb(kb)
+
+    result = liking_kb.query(pl.Expr(f"to_like(utente, {Compatibility}, What)"))
+    p = result[0][f"{Compatibility}"]
+
+    if(p > 100):
+        p = 100
+    elif(p < 0):
+        p = 0
+
+    print("La probabilità che", Gioco_Nuovo, "ti possa piacere è:", p)
+
+def assign_range(num):
+
+    num = int(num)
+
+    if((abs(num) >= 0) & (abs(num) <= 100)):
+        i = 100
+    elif((abs(num) > 100) & (abs(num) <= 250)):
+        i = 90
+    elif((abs(num) > 250) & (abs(num) <= 500)):
+        i = 80
+    elif((abs(num) > 500) & (abs(num) <= 750)):
+        i = 70
+    elif((abs(num) > 750) & (abs(num) <= 1000)):
+        i = 60
+    elif((abs(num) > 1000) & (abs(num) <= 1250)):
+        i = 50
+    elif((abs(num) > 1250) & (abs(num) <= 1500)):
+        i = 40
+    elif((abs(num) > 1500) & (abs(num) <= 1750)):
+        i = 30
+    elif((abs(num) > 1750) & (abs(num) <= 2000)):
+        i = 20
+    elif((abs(num) > 2000) & (abs(num) <= 2500)):
+        i = 20
+    elif((abs(num) > 2500) & (abs(num) <= 10000)):
+        i = 10
+    elif(abs(num) > 10000):
+        i = 0
+
+    return i
+
 # - MAIN - INTERAZIONE CON L'UTENTE
 def main_kb():
 
@@ -130,7 +246,8 @@ def main_kb():
         print("1) Ricerche sulle caratteristiche di un gioco")
         print("2) Confronti e ricerca di giochi in base ad una caratteristica")
         print("3) Verificare delle caratteristiche")
-        print("4) Exit Knowledge Base\n")
+        print("4) Vedere con quale probabilità ti possa piacere un nuobo gioco")
+        print("5) Exit Knowledge Base\n")
         choice1 = input("Quale scegli (inserisci il numero corrispondente alla tua scelta)? ")
         c1 = int(choice1)
 
@@ -243,4 +360,16 @@ def main_kb():
                     break
 
         elif(c1 == 4):
+            while(True):
+                liking_prob(dataframe)
+                risposta = input("Vuoi controllare un'altra probabilità o vuoi tornare indietro?\tIndietro (sì), Continua (no)")
+                if(risposta == 'sì'):
+                    break
+                elif(risposta == 'si'):
+                    break
+                elif(risposta == 's'):
+                    break
+
+        elif(c1 == 5):
+            print("\nArrivederci\n")
             break
